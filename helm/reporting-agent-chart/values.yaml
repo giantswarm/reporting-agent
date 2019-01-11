@@ -1,0 +1,39 @@
+agent:
+  image: quay.io/giantswarm/reporting-agent
+  image_tag: 1184a230a65709228b458b1c086d1a575b78394c
+  index: agent-test1
+  resource_types: 
+    # - clusterrolebindings
+    # - clusterroles
+    # - componentstatuses
+    # - cronjobs
+    # - customresourcedefinition
+    # - daemonsets
+    # - deployments
+    # - endpoints
+    # - horizontalpodautoscalers
+    # - ingresses
+    # - jobs
+    # - limitranges
+    # - namespaces
+    # - networkpolicies
+    # - nodes
+    # - persistentvolumeclaims
+    # - persistentvolumes
+    # - poddisruptionbudgets
+    # - podpreset
+    - pods
+    # - podsecuritypolicies
+    # - podtemplates
+    # - replicasets
+    # - replicationcontrollers
+    # - resourcequotas
+    # - rolebindings
+    # - roles
+    # - serviceaccounts
+    # - services
+    # - statefulsets
+    # - storageclasses
+
+  elasticsearch_url: http://reporting-tool-reporting-chart-elasticsearch.jgsqware-reporting-tool.svc:9200
+  schedule: "*/1 * * * *"
