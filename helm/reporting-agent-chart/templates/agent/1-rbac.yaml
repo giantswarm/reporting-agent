@@ -26,13 +26,9 @@ rules:
 - apiGroups:
   - ""
   resources:
-  - daemonsets
-  - deployments
-  - ingresses
-  - namespaces
-  - pods
-  - replicasets
-  - services
-  - statefulsets
+  {{- range .Values.agent.resource_types }}
+    - {{.}}
+  {{- end }}
+
   verbs:
   - get

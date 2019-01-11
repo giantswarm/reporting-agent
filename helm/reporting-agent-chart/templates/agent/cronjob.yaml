@@ -31,4 +31,4 @@ spec:
             - name: ELASTICSEARCH_INDEX_URL
               value: {{ .Values.agent.elasticsearch_url }}/{{ .Values.agent.index }}
             - name: RESOURCE_TYPES
-              value: {{ .Values.agent.resource_types }}
+              value: {{ .Values.agent.resource_types | join "," }}
