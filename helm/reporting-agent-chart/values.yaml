@@ -1,39 +1,37 @@
-agent:
-  image: quay.io/giantswarm/reporting-agent
-  image_tag: latest
-  index: agent-test1
-  resource_types: 
-    # - clusterrolebindings
-    # - clusterroles
-    # - componentstatuses
-    # - cronjobs
-    # - customresourcedefinition
-    # - daemonsets
-    # - deployments
-    # - endpoints
-    # - horizontalpodautoscalers
-    # - ingresses
-    # - jobs
-    # - limitranges
-    # - namespaces
-    # - networkpolicies
-    # - nodes
-    # - persistentvolumeclaims
-    # - persistentvolumes
-    # - poddisruptionbudgets
-    # - podpreset
-    - pods
-    # - podsecuritypolicies
-    # - podtemplates
-    # - replicasets
-    # - replicationcontrollers
-    # - resourcequotas
-    # - rolebindings
-    # - roles
-    # - serviceaccounts
-    # - services
-    # - statefulsets
-    # - storageclasses
-
-  elasticsearch_url: http://elasticsearch.reporting.svc:9200
-  schedule: "*/1 * * * *"
+image: quay.io/giantswarm/reporting-agent
+image_tag: latest
+index: agent-test1
+resource_types: 
+  # - clusterrolebindings
+  # - clusterroles
+  # - componentstatuses
+  # - cronjobs
+  # - customresourcedefinition
+  # - daemonsets
+  # - deployments
+  # - endpoints
+  # - horizontalpodautoscalers
+  # - ingresses
+  # - jobs
+  # - limitranges
+  # - namespaces
+  # - networkpolicies
+  # - nodes
+  # - persistentvolumeclaims
+  # - persistentvolumes
+  # - poddisruptionbudgets
+  # - podpreset
+  - pods
+  # - podsecuritypolicies
+  # - podtemplates
+  # - replicasets
+  # - replicationcontrollers
+  # - resourcequotas
+  # - rolebindings
+  # - roles
+  # - serviceaccounts
+  # - services
+  # - statefulsets
+  # - storageclasses
+elasticsearch_url: http://elasticsearch.reporting.svc:9200
+schedule: "*/1 * * * *"

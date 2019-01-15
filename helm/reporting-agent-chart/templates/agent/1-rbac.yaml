@@ -26,7 +26,7 @@ rules:
 - apiGroups:
   - ""
   resources:
-  {{- range .Values.agent.resource_types }}
+  {{- range .Values.resource_types }}
     - {{.}}
   {{- end }}
 

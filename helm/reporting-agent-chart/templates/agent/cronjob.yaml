@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: {{ template "agent.fullname" . }}
 spec:
-  schedule: {{ .Values.agent.schedule | quote}}
+  schedule: {{ .Values.schedule | quote}}
   jobTemplate:
     spec:
       template:
@@ -13,9 +13,9 @@ spec:
           imagePullPolicy: Always
           containers:
           - name: reporting-agent
-            image: {{ .Values.agent.image }}:{{ .Values.agent.image_tag }}
+            image: {{ .Values.image }}:{{ .Values.image_tag }}
             env:
             - name: ELASTICSEARCH_INDEX_URL
-              value: {{ .Values.agent.elasticsearch_url }}/{{ .Values.agent.index }}
+              value: {{ .Values.elasticsearch_url }}/{{ .Values.index }}
             - name: RESOURCE_TYPES
-              value: {{ .Values.agent.resource_types | join "," }}
+              value: {{ .Values.resource_types | join "," }}
