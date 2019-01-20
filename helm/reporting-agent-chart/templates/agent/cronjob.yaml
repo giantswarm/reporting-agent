@@ -9,7 +9,7 @@ spec:
       template:
         spec:
           serviceAccountName: {{ template "agent.fullname" . }}
-          concurrencyPolicy: Replace
+          concurrencyPolicy: Forbid
           imagePullPolicy: Always
           restartPolicy: Never
           failedJobsHistoryLimit: 3
