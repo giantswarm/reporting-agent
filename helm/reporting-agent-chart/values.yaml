@@ -8,7 +8,7 @@ resource_types:
   # - cronjobs
   # - customresourcedefinition
   # - daemonsets
-    - deployments
+  - deployments
   # - endpoints
   # - horizontalpodautoscalers
   # - ingresses
