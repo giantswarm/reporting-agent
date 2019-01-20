@@ -1,6 +1,6 @@
 image: quay.io/giantswarm/reporting-agent
 image_tag: latest
-index: agent-test1
+index: agent-test
 resource_types: 
   # - clusterrolebindings
   # - clusterroles

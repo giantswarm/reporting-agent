@@ -9,8 +9,11 @@ spec:
       template:
         spec:
           serviceAccountName: {{ template "agent.fullname" . }}
-          restartPolicy: Never
+          concurrencyPolicy: Replace
           imagePullPolicy: Always
+          restartPolicy: Never
+          failedJobsHistoryLimit: 3
+          successfulJobsHistoryLimit: 1
           containers:
           - name: reporting-agent
             image: {{ .Values.image }}:{{ .Values.image_tag }}

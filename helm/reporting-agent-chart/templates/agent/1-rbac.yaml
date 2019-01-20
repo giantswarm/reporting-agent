@@ -15,8 +15,6 @@ subjects:
 - kind: ServiceAccount
   name: {{ template "agent.fullname" . }}
   namespace: {{ .Release.Namespace }}
-  
-
 --- 
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -29,6 +27,5 @@ rules:
   {{- range .Values.resource_types }}
     - {{.}}
   {{- end }}
-
   verbs:
   - get
