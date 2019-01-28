@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/bin/ash
 
 echo "Retrieving resources..."
 echo "Types: ${RESOURCE_TYPES}"
 
-SUFFIX=$(date +'%d-%m-%Y')
+SUFFIX=$(date +'%Y-%m-%d')
 kubectl get --all-namespaces --export --output=json "${RESOURCE_TYPES}" | jq -c '.items[]' | while IFS= read -r line; do
   echo "${line}" | curl \
     --insecure --basic --ssl-reqd \
