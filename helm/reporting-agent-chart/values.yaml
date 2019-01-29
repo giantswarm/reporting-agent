@@ -34,4 +34,4 @@ resource_types:
   # - statefulsets
   # - storageclasses
 elasticsearch_url: http://elasticsearch.reporting.svc:9200
-schedule: "*/1 * * * *"
+schedule: "* */1 * * *"
