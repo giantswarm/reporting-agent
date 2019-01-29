@@ -6,7 +6,7 @@ echo "Types: ${RESOURCE_TYPES}"
 SUFFIX=$(date +'%Y-%m-%d')
 kubectl get --all-namespaces --export --output=json "${RESOURCE_TYPES}" | \
   jq -c '.items[]' | \
-  jq --arg cluster "${CLUSTER}" '.metadata.cluster = $cluster' | \
+  jq -c --arg cluster "${CLUSTER}" '.metadata.cluster = $cluster' | \
   while IFS= read -r line; do
   echo "${line}" | curl \
     --insecure --basic --ssl-reqd \
