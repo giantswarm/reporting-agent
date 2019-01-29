@@ -16,9 +16,11 @@ spec:
           successfulJobsHistoryLimit: 1
           containers:
           - name: reporting-agent
-            image: {{ .Values.image }}:{{ .Values.image_tag }}
+            image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
             env:
             - name: ELASTICSEARCH_INDEX_URL
               value: {{ .Values.elasticsearch_url }}/{{ .Values.index }}
             - name: RESOURCE_TYPES
               value: {{ .Values.resource_types | join "," }}
+            - name: CLUSTER
+              value: {{ .Values.cluster }}
