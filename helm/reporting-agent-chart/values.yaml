@@ -1,6 +1,17 @@
-image: quay.io/giantswarm/reporting-agent
-image_tag: latest
+
+# ES index where data is going to be pushed
 index: gs-agent-test
+
+elasticsearch_url: http://elasticsearch.reporting.svc:9200
+
+schedule: "* */6 * * *"
+
+cluster: "default"
+
+image: 
+  repository: quay.io/giantswarm/reporting-agent
+  tag: 0.0.8
+
 resource_types: 
   # - clusterrolebindings
   # - clusterroles
@@ -33,5 +44,3 @@ resource_types:
   # - services
   # - statefulsets
   # - storageclasses
-elasticsearch_url: http://elasticsearch.reporting.svc:9200
-schedule: "* */1 * * *"
