@@ -5,13 +5,24 @@ jobs:
     steps:
     - checkout
 
-    - run: |
-        wget -q $(curl -sS -H "Authorization: token $RELEASE_TOKEN" https://api.github.com/repos/giantswarm/architect/releases/latest | grep browser_download_url | head -n 1 | cut -d '"' -f 4)
-        chmod +x ./architect
-        ./architect version
-    - run: ./architect build
+    - run:
+        name: install helm
+        command: .circleci/install.sh
+    - run:
+        name: set env tag
+        command: echo "export TAG=$(cat helm/reporting-agent-chart/Chart.yaml | grep version | awk '{ print $2 }')" >> $BASH_ENV
+    - run:
+        name: helm lint
+        command: helm lint ./helm/reporting-agent-chart
+    - run:
+        name: docker login
+        command: docker login quay.io -u $QUAY_USERNAME -p $QUAY_PASSWORD
+    - run:
+        name: docker build
+        command: docker build -t quay.io/giantswarm/reporting-agent:${TAG} .
+
     - deploy:
         command: |
           if [ "${CIRCLE_BRANCH}" == "master" ]; then
-            ./architect deploy
+            docker push quay.io/giantswarm/reporting-agent:${TAG}
           fi
