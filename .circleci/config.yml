@@ -12,9 +12,6 @@ jobs:
         name: set env tag
         command: echo 'export TAG=$(cat helm/reporting-agent-chart/Chart.yaml | yq -r .version)' >> $BASH_ENV
     - run:
-        name: display env tag
-        command: echo ${TAG}
-    - run:
         name: helm lint
         command: helm lint ./helm/reporting-agent-chart
     - run:
