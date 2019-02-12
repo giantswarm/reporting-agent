@@ -2,6 +2,9 @@ version: 2
 jobs:
   build:
     machine: true
+    branches:
+      ignore:
+        - "master"
     steps:
     - checkout
 
@@ -10,19 +13,44 @@ jobs:
         command: .circleci/install.sh
     - run:
         name: set env tag
-        command: echo "export TAG=$(cat helm/reporting-agent-chart/Chart.yaml | grep version | awk '{ print $2 }')" >> $BASH_ENV
+        command: echo "export TAG=$(cat helm/reporting-agent/Chart.yaml | grep version | awk '{ print $2 }')" >> $BASH_ENV
     - run:
         name: helm lint
-        command: helm lint ./helm/reporting-agent-chart
+        command: helm lint ./helm/reporting-agent
+    - run:
+        name: docker build
+        command: docker build -t quay.io/giantswarm/reporting-agent:${TAG} .
+
+  deploy:
+    machine: true
+    branches:
+      only:
+        - "master"
+    steps:
+    - checkout
+
+    - run:
+        name: install helm
+        command: .circleci/install.sh
+    - run:
+        name: set env tag
+        command: echo "export TAG=$(cat helm/reporting-agent/Chart.yaml | grep version | awk '{ print $2 }')" >> $BASH_ENV
+    - run:
+        name: helm lint
+        command: helm lint ./helm/reporting-agent
     - run:
         name: docker login
         command: docker login quay.io -u $QUAY_USERNAME -p $QUAY_PASSWORD
     - run:
         name: docker build
         command: docker build -t quay.io/giantswarm/reporting-agent:${TAG} .
-
-    - deploy:
+    - run:
+        name: Push to registry
         command: |
-          if [ "${CIRCLE_BRANCH}" == "master" ]; then
-            docker push quay.io/giantswarm/reporting-agent:${TAG}
-          fi
+          docker push quay.io/giantswarm/reporting-agent:${TAG}
+    - run:
+        name: helm registry login
+        command: helm registry login quay.io -u $QUAY_USERNAME -p $QUAY_PASSWORD
+    - run:
+        name: Push to registry
+        command: cd helm/reporting-agent && helm registry push quay.io/giantswarm/reporting-agent  
