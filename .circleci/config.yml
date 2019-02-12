@@ -10,7 +10,7 @@ jobs:
         command: .circleci/install.sh
     - run:
         name: set env tag
-        command: cat helm/reporting-agent-chart/Chart.yaml | yq -r .version >> $TAG
+        command: export TAG=$(cat helm/reporting-agent-chart/Chart.yaml | yq -r .version)
     - run:
         name: display env tag
         command: echo $TAG
