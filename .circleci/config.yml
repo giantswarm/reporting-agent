@@ -6,8 +6,14 @@ jobs:
     - checkout
 
     - run:
-        name: install helm
+        name: install tools
         command: .circleci/install.sh
+    - run:
+        name: set env tag
+        command: cat helm/reporting-agent-chart/Chart.yaml | yq -r .version >> $TAG
+    - run:
+        name: display env tag
+        command: echo $TAG
     - run:
         name: helm lint
         command: helm lint ./helm/reporting-agent-chart
