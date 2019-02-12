@@ -2,16 +2,55 @@ version: 2
 jobs:
   build:
     machine: true
+    branches:
+      ignore:
+        - "master"
     steps:
     - checkout
 
-    - run: |
-        wget -q $(curl -sS -H "Authorization: token $RELEASE_TOKEN" https://api.github.com/repos/giantswarm/architect/releases/latest | grep browser_download_url | head -n 1 | cut -d '"' -f 4)
-        chmod +x ./architect
-        ./architect version
-    - run: ./architect build
-    - deploy:
+    - run:
+        name: install helm
+        command: .circleci/install.sh
+    - run:
+        name: set env tag
+        command: echo "export TAG=$(cat helm/reporting-agent/Chart.yaml | grep version | awk '{ print $2 }')" >> $BASH_ENV
+    - run:
+        name: helm lint
+        command: helm lint ./helm/reporting-agent
+    - run:
+        name: docker build
+        command: docker build -t quay.io/giantswarm/reporting-agent:${TAG} .
+
+  deploy:
+    machine: true
+    branches:
+      only:
+        - "master"
+    steps:
+    - checkout
+
+    - run:
+        name: install helm
+        command: .circleci/install.sh
+    - run:
+        name: set env tag
+        command: echo "export TAG=$(cat helm/reporting-agent/Chart.yaml | grep version | awk '{ print $2 }')" >> $BASH_ENV
+    - run:
+        name: helm lint
+        command: helm lint ./helm/reporting-agent
+    - run:
+        name: docker login
+        command: docker login quay.io -u $QUAY_USERNAME -p $QUAY_PASSWORD
+    - run:
+        name: docker build
+        command: docker build -t quay.io/giantswarm/reporting-agent:${TAG} .
+    - run:
+        name: Push to registry
         command: |
-          if [ "${CIRCLE_BRANCH}" == "master" ]; then
-            ./architect deploy
-          fi
+          docker push quay.io/giantswarm/reporting-agent:${TAG}
+    - run:
+        name: helm registry login
+        command: helm registry login quay.io -u $QUAY_USERNAME -p $QUAY_PASSWORD
+    - run:
+        name: Push to registry
+        command: cd helm/reporting-agent && helm registry push quay.io/giantswarm/reporting-agent  
