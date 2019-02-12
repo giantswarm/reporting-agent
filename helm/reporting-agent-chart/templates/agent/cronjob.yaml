@@ -16,7 +16,7 @@ spec:
           successfulJobsHistoryLimit: 1
           containers:
           - name: reporting-agent
-            image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+            image: quay.io/giantswarm/reporting-agent:{{ .Chart.Version }}
             env:
             - name: ELASTICSEARCH_INDEX_URL
               value: {{ .Values.elasticsearch_url }}/{{ .Values.index }}
