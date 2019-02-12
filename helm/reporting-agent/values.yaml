@@ -1,6 +1,6 @@
 
 # ES index where data is going to be pushed
-index: gs-agent-test
+index: gs-agent
 
 elasticsearch_url: http://elasticsearch.reporting.svc:9200
 

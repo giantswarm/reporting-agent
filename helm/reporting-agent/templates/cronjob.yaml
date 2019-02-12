@@ -3,17 +3,18 @@ kind: CronJob
 metadata:
   name: {{ template "agent.fullname" . }}
 spec:
-  schedule: {{ .Values.schedule | quote}}
+  schedule: {{ .Values.schedule | quote }}
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 1
   jobTemplate:
     spec:
+      activeDeadlineSeconds: 600
+      backoffLimit: 3
       template:
         spec:
           serviceAccountName: {{ template "agent.fullname" . }}
-          concurrencyPolicy: Forbid
-          imagePullPolicy: Always
           restartPolicy: Never
-          failedJobsHistoryLimit: 3
-          successfulJobsHistoryLimit: 1
           containers:
           - name: reporting-agent
             image: quay.io/giantswarm/reporting-agent:{{ .Chart.Version }}
