@@ -13,7 +13,7 @@ jobs:
         command: echo 'export TAG=$(cat helm/reporting-agent-chart/Chart.yaml | yq -r .version)' >> $BASH_ENV
     - run:
         name: display env tag
-        command: echo $TAG
+        command: echo ${TAG}
     - run:
         name: helm lint
         command: helm lint ./helm/reporting-agent-chart
@@ -22,10 +22,10 @@ jobs:
         command: docker login quay.io -u $QUAY_USERNAME -p $QUAY_PASSWORD
     - run:
         name: docker build
-        command: docker build -t quay.io/giantswarm/reporting-agent:$TAG .
+        command: docker build -t quay.io/giantswarm/reporting-agent:${TAG} .
 
     - deploy:
         command: |
           if [ "${CIRCLE_BRANCH}" == "master" ]; then
-            docker push quay.io/giantswarm/reporting-agent:$TAG
+            docker push quay.io/giantswarm/reporting-agent:${TAG}
           fi
