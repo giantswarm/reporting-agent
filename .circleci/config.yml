@@ -6,11 +6,11 @@ jobs:
     - checkout
 
     - run:
-        name: install tools
+        name: install helm
         command: .circleci/install.sh
     - run:
         name: set env tag
-        command: echo 'export TAG=$(cat helm/reporting-agent-chart/Chart.yaml | yq -r .version)' >> $BASH_ENV
+        command: echo 'export TAG=$(cat helm/reporting-agent-chart/Chart.yaml | grep version | awk "{ print $2 }")' >> $BASH_ENV
     - run:
         name: helm lint
         command: helm lint ./helm/reporting-agent-chart
