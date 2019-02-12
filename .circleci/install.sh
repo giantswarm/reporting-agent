@@ -23,9 +23,4 @@ rm -f helm-${HELM_LATEST_VERSION}-linux-amd64.tar.gz
 rm -rf linux-amd64 
 
 # Install yq
-git clone https://github.com/kislyuk/yq
-cd yq
-autoreconf -i
-./configure --disable-maintainer-mode
-make
-sudo make install
+pip install yq
