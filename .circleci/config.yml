@@ -2,9 +2,6 @@ version: 2
 jobs:
   build:
     machine: true
-    branches:
-      ignore:
-        - "master"
     steps:
     - checkout
 
@@ -23,9 +20,6 @@ jobs:
 
   deploy:
     machine: true
-    branches:
-      only:
-        - "master"
     steps:
     - checkout
 
@@ -54,3 +48,16 @@ jobs:
     - run:
         name: Push to registry
         command: cd helm/reporting-agent && helm registry push quay.io/giantswarm/reporting-agent  
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              ignore: master
+      - deploy:
+          filters:
+            branches:
+              only: master
