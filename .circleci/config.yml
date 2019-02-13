@@ -47,7 +47,7 @@ jobs:
         command: helm registry login quay.io -u $QUAY_USERNAME -p $QUAY_PASSWORD
     - run:
         name: Push to registry
-        command: cd helm/reporting-agent-chart && helm registry push quay.io/giantswarm/reporting-agent-chart --namespace giantswarm  --channel stable 
+        command: cd helm/reporting-agent-chart && helm registry push quay.io --namespace giantswarm  --channel stable 
 
 workflows:
   version: 2
