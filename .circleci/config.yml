@@ -1,63 +1,16 @@
-version: 2
-jobs:
-  build:
-    machine: true
-    steps:
-    - checkout
-
-    - run:
-        name: install helm
-        command: .circleci/install.sh
-    - run:
-        name: set env tag
-        command: echo "export TAG=$(cat helm/reporting-agent-chart/Chart.yaml | grep version | awk '{ print $2 }')" >> $BASH_ENV
-    - run:
-        name: helm lint
-        command: helm lint ./helm/reporting-agent-chart
-    - run:
-        name: docker build
-        command: docker build -t quay.io/giantswarm/reporting-agent:${TAG} .
-
-  deploy:
-    machine: true
-    steps:
-    - checkout
-
-    - run:
-        name: install helm
-        command: .circleci/install.sh
-    - run:
-        name: set env tag
-        command: echo "export TAG=$(cat helm/reporting-agent-chart/Chart.yaml | grep version | awk '{ print $2 }')" >> $BASH_ENV
-    - run:
-        name: helm lint
-        command: helm lint ./helm/reporting-agent-chart
-    - run:
-        name: docker login
-        command: docker login quay.io -u $QUAY_USERNAME -p $QUAY_PASSWORD
-    - run:
-        name: docker build
-        command: docker build -t quay.io/giantswarm/reporting-agent:${TAG} .
-    - run:
-        name: Push to registry
-        command: |
-          docker push quay.io/giantswarm/reporting-agent:${TAG}
-    - run:
-        name: helm registry login
-        command: helm registry login quay.io -u $QUAY_USERNAME -p $QUAY_PASSWORD
-    - run:
-        name: Push to registry
-        command: cd helm/reporting-agent-chart && helm registry push quay.io --namespace giantswarm  --channel stable 
+version: 2.1
+orbs:
+  architect: giantswarm/architect@0.2.0
 
 workflows:
-  version: 2
-  build_and_deploy:
+  package-and-push-chart-on-tag:
     jobs:
-      - build:
+      - architect/push-to-app-catalog:
+          name: "package and push k8s-initiator-app chart"
+          app_catalog: "giantswarm-incubator-catalog"
+          app_catalog_test: "giantswarm-incubator-test-catalog"
+          chart: "k8s-initiator-app"
+          # Trigger job on git tag.
           filters:
-            branches:
-              ignore: master
-      - deploy:
-          filters:
-            branches:
-              only: master
+            tags:
+              only: /^v.*/
